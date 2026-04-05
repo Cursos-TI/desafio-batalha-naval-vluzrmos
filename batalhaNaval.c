@@ -2,8 +2,11 @@
 
 int TAMANHO_TABULEIRO_HORIZONTAL = 10;
 int TAMANHO_TABULEIRO_VERTICAL = 10;
-int AGUA=0;
-int NAVIO=3;
+
+int VALOR_AGUA=0;
+int VALOR_NAVIO=3;
+int VALOR_HABILIDADE=5;
+
 int TAMANHO_NAVIO_1=3;
 int TAMANHO_NAVIO_2=3;
 int TAMANHO_NAVIO_3=3;
@@ -12,14 +15,14 @@ int TAMANHO_NAVIO_4=3;
 void inicializa_tabuleiro(int tabuleiro[TAMANHO_TABULEIRO_VERTICAL][TAMANHO_TABULEIRO_HORIZONTAL]) {
     for (int i = 0; i < TAMANHO_TABULEIRO_VERTICAL; i++) {
         for (int j = 0; j < TAMANHO_TABULEIRO_HORIZONTAL; j++) {
-            tabuleiro[i][j] = AGUA;
+            tabuleiro[i][j] = VALOR_AGUA;
         }
     }
 }
 
 void inicializa_navio(int navio[], int tamanho) {
     for (int i = 0; i < tamanho; i++) {
-        navio[i] = NAVIO;
+        navio[i] = VALOR_NAVIO;
     }
 }
 
@@ -30,7 +33,7 @@ void posiciona_navio_vertical(int tabuleiro[TAMANHO_TABULEIRO_VERTICAL][TAMANHO_
     }
 
     for (int i = 0; i < tamanho; i++) {
-        if (tabuleiro[linha + i][coluna] != AGUA) {
+        if (tabuleiro[linha + i][coluna] != VALOR_AGUA) {
             printf("Erro: O navio não pode ser posicionado verticalmente nessa posição, pois há um navio já presente.\n");
             return;
         }
@@ -48,7 +51,7 @@ void posiciona_navio_horizontal(int tabuleiro[TAMANHO_TABULEIRO_VERTICAL][TAMANH
     }
 
     for (int i = 0; i < tamanho; i++) {
-        if (tabuleiro[linha][coluna + i] != AGUA) {
+        if (tabuleiro[linha][coluna + i] != VALOR_AGUA) {
             printf("Erro: O navio não pode ser posicionado horizontalmente nessa posição, pois há um navio já presente.\n");
             return;
         }
@@ -66,7 +69,7 @@ void posiciona_navio_diagonal(int tabuleiro[TAMANHO_TABULEIRO_VERTICAL][TAMANHO_
     }
 
     for (int i = 0; i < tamanho; i++) {
-        if (tabuleiro[linha + i][coluna + i] != AGUA) {
+        if (tabuleiro[linha + i][coluna + i] != VALOR_AGUA) {
             printf("Erro: O navio não pode ser posicionado diagonalmente nessa posição, pois há um navio já presente.\n");
             return;
         }
@@ -83,6 +86,23 @@ void exibe_tabuleiro(int tabuleiro[TAMANHO_TABULEIRO_VERTICAL][TAMANHO_TABULEIRO
             printf("%d ", tabuleiro[i][j]);
         }
         printf("\n");
+    }
+}
+
+
+void ataque_habilidade(int tabuleiro[TAMANHO_TABULEIRO_VERTICAL][TAMANHO_TABULEIRO_HORIZONTAL], int habilidade[3][5], int linha, int coluna) {
+    for (int i = 0; i < 3; i++) {
+        for (int j = 0; j < 5; j++) {
+            if (habilidade[i][j] == 1) {
+                int alvo_linha = linha + i - 1; // Centraliza a habilidade
+                int alvo_coluna = coluna + j - 2; // Centraliza a habilidade
+
+                if (alvo_linha >= 0 && alvo_linha < TAMANHO_TABULEIRO_VERTICAL &&
+                    alvo_coluna >= 0 && alvo_coluna < TAMANHO_TABULEIRO_HORIZONTAL) {
+                    tabuleiro[alvo_linha][alvo_coluna] = VALOR_HABILIDADE;
+                }
+            }
+        }
     }
 }
 
@@ -135,6 +155,23 @@ int main() {
     // Sugestão: Utilize estruturas de repetição aninhadas para preencher as áreas afetadas por essas habilidades no tabuleiro.
     // Sugestão: Exiba o tabuleiro com as áreas afetadas, utilizando 0 para áreas não afetadas e 1 para áreas atingidas.
 
+    int habilidade_cone[3][5] = {
+        {0, 0, 1, 0, 0},
+        {0, 1, 1, 1, 0},
+        {1, 1, 1, 1, 1}
+    };
+
+    int habilidade_octaedro[3][5] = {
+        {0, 0, 1, 0, 0},
+        {0, 1, 1, 1, 0},
+        {0, 0, 1, 0, 0}
+    };
+
+    int habilidade_cruz[3][5] = {
+        {0, 0, 1, 0, 0},
+        {1, 1, 1, 1, 1},
+        {0, 0, 1, 0, 0}
+    };
     // Exemplos de exibição das habilidades:
     // Exemplo para habilidade em cone:
     // 0 0 1 0 0
@@ -150,6 +187,12 @@ int main() {
     // 0 0 1 0 0
     // 1 1 1 1 1
     // 0 0 1 0 0
+
+    ataque_habilidade(tabuleiro, habilidade_cone, 0, 0);
+    ataque_habilidade(tabuleiro, habilidade_octaedro, 5, 5);
+    ataque_habilidade(tabuleiro, habilidade_cruz, 7, 2);
+    printf("Tabuleiro após ataque com habilidade em cone:\n\n");
+    exibe_tabuleiro(tabuleiro);
 
     return 0;
 }
