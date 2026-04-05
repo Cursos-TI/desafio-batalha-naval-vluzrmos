@@ -191,7 +191,7 @@ int main() {
     ataque_habilidade(tabuleiro, habilidade_cone, 0, 0);
     ataque_habilidade(tabuleiro, habilidade_octaedro, 5, 5);
     ataque_habilidade(tabuleiro, habilidade_cruz, 7, 2);
-    printf("Tabuleiro após ataque com habilidade em cone:\n\n");
+    printf("Tabuleiro após ataque com habilidades:\n\n");
     exibe_tabuleiro(tabuleiro);
 
     return 0;
