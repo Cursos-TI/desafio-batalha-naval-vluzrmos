@@ -7,14 +7,41 @@ int NAVIO=3;
 int TAMANHO_NAVIO_1=3;
 int TAMANHO_NAVIO_2=3;
 
-
 void inicializa_tabuleiro(int tabuleiro[TAMANHO_TABULEIRO_VERTICAL][TAMANHO_TABULEIRO_HORIZONTAL]) {
     for (int i = 0; i < TAMANHO_TABULEIRO_VERTICAL; i++) {
         for (int j = 0; j < TAMANHO_TABULEIRO_HORIZONTAL; j++) {
-            tabuleiro[i][j] = AGUA; // Inicializa o tabuleiro com água
+            tabuleiro[i][j] = AGUA;
         }
     }
 }
+
+void inicializa_navio(int navio[], int tamanho) {
+    for (int i = 0; i < tamanho; i++) {
+        navio[i] = NAVIO;
+    }
+}
+
+void posiciona_navio_vertical(int tabuleiro[TAMANHO_TABULEIRO_VERTICAL][TAMANHO_TABULEIRO_HORIZONTAL], int navio[], int tamanho, int linha, int coluna) {
+    for (int i = 0; i < tamanho; i++) {
+        tabuleiro[linha + i][coluna] = navio[i];
+    }
+}
+
+void posiciona_navio_horizontal(int tabuleiro[TAMANHO_TABULEIRO_VERTICAL][TAMANHO_TABULEIRO_HORIZONTAL], int navio[], int tamanho, int linha, int coluna) {
+    for (int i = 0; i < tamanho; i++) {
+        tabuleiro[linha][coluna + i] = navio[i];
+    }
+}
+
+void exibe_tabuleiro(int tabuleiro[TAMANHO_TABULEIRO_VERTICAL][TAMANHO_TABULEIRO_HORIZONTAL]) {
+    for (int i = 0; i < TAMANHO_TABULEIRO_VERTICAL; i++) {
+        for (int j = 0; j < TAMANHO_TABULEIRO_HORIZONTAL; j++) {
+            printf("%d ", tabuleiro[i][j]);
+        }
+        printf("\n");
+    }
+}
+
 // Desafio Batalha Naval - MateCheck
 // Este código inicial serve como base para o desenvolvimento do sistema de Batalha Naval.
 // Siga os comentários para implementar cada parte do desafio.
@@ -27,35 +54,17 @@ int main() {
 
     // Iniciando o tabuleiro com zeros (0 representa posição vazia, água)
     int tabuleiro[TAMANHO_TABULEIRO_VERTICAL][TAMANHO_TABULEIRO_HORIZONTAL];
-
-    inicializa_tabuleiro(tabuleiro);
     int navio1[TAMANHO_NAVIO_1]; // Navio vertical
     int navio2[TAMANHO_NAVIO_2]; // Navio horizontal
+    
+    inicializa_tabuleiro(tabuleiro);
+    inicializa_navio(navio1, TAMANHO_NAVIO_1);
+    inicializa_navio(navio2, TAMANHO_NAVIO_2);
 
-    for (int i = 0; i < TAMANHO_NAVIO_1; i++) {
-        navio1[i] = NAVIO;
-    }
+    posiciona_navio_horizontal(tabuleiro, navio2, TAMANHO_NAVIO_2, 0, 0);
+    posiciona_navio_vertical(tabuleiro, navio1, TAMANHO_NAVIO_1, 2, 1);
 
-    for (int i = 0; i < TAMANHO_NAVIO_2; i++) {
-        navio2[i] = NAVIO;
-    }
-
-    // inicializa 
-
-    for (int i = 0; i < TAMANHO_NAVIO_1; i++) {
-        tabuleiro[i][0] = navio1[i]; // Posicionando navio vertical na coluna 0
-    }
-
-    for (int i = 0; i < TAMANHO_NAVIO_2; i++) {
-        tabuleiro[0][i+2] = navio2[i]; // Posicionando navio horizontal na linha 0
-    }
-
-    for (int i = 0; i < TAMANHO_TABULEIRO_VERTICAL; i++) {
-        for (int j = 0; j < TAMANHO_TABULEIRO_HORIZONTAL; j++) {
-            printf("%d ", tabuleiro[i][j]);
-        }
-        printf("\n");
-    }
+    exibe_tabuleiro(tabuleiro);
 
     // Nível Aventureiro - Expansão do Tabuleiro e Posicionamento Diagonal
     // Sugestão: Expanda o tabuleiro para uma matriz 10x10.
